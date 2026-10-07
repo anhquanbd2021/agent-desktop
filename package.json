@@ -1,0 +1,16 @@
+{
+  "name": "agent-desktop-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Perception Lab — the same desktop through pixels and through the accessibility tree: token budgets, refs, and the blind spots on both sides.",
+  "scripts": {
+    "start": "node app/server.js",
+    "report": "node scripts/report.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
+    "check": "npm test && npm run report"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How the Perception Lab works: two perception modes, token budgets, progressive skeleton traversal, and honest limits.">
+  <title>Perception Lab — guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@400;500;700;800&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<main id="main" tabindex="-1">
+  <nav aria-label="Primary"><a href="/">Lab</a><a aria-current="page" href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/agent-desktop">Source <span aria-hidden="true">↗</span></a></nav>
+  <header class="page-header"><p class="eyebrow">Guide</p><h1>Two ways to see the same screen</h1></header>
+
+  <section class="guide-section">
+    <h2>What the lab models</h2>
+    <p>Computer-use agents perceive a desktop in one of two ways:</p>
+    <ul>
+      <li><strong>Pixels.</strong> Take a screenshot, feed it to a vision model, get back text and approximate coordinates. The model pays for the whole image every step and still has to guess what each element <em>is</em>.</li>
+      <li><strong>Structure.</strong> Ask the OS for the accessibility tree — the same API screen readers have used for decades (macOS Accessibility API, Windows UI Automation, Linux AT-SPI). Every element arrives with a role, name, state, and supported actions.</li>
+    </ul>
+    <p>The lab renders one fixture scene both ways so the trade-offs are visible side by side. It is inspired by <a href="https://github.com/lahfir/agent-desktop">agent-desktop</a>, a Rust CLI that exposes real desktop accessibility trees to agents with deterministic <code>@eN</code> refs and JSON output.</p>
+  </section>
+
+  <section class="guide-section">
+    <h2>Reading the token budgets</h2>
+    <p>Three counters, one scene:</p>
+    <ul>
+      <li><strong>Screenshot</strong> — image tokens scale with resolution, not with content: an empty desktop and a dense Slack window cost the same. Our model uses ≈ pixels/750 plus a text-reading surcharge.</li>
+      <li><strong>Full tree</strong> — scales with node count. Small windows are cheap; dense apps can exceed a screenshot. The real tool measured a full Slack snapshot at 30,743 tokens.</li>
+      <li><strong>Skeleton</strong> — a shallow overview: only top-level containers, each annotated with <code>children_count</code>. The real tool's Slack example drops to 383 tokens — a 78–96% reduction on dense apps. The agent then drills into one ref (<code>--root @e3</code>) and pays only for that region.</li>
+    </ul>
+  </section>
+
+  <section class="guide-section">
+    <h2>The query deck</h2>
+    <p>Six questions score each mode <em>answered / guesses / blind</em>:</p>
+    <div class="table-wrap" tabindex="0"><table>
+      <tr><th>Question</th><th>Tree</th><th>Pixels</th><th>Why</th></tr>
+      <tr><td>Click "Send"</td><td>answered</td><td>guesses</td><td>Tree returns a ref + <code>press</code> action; pixels return coordinates that shift with layout.</td></tr>
+      <tr><td>Checkbox state</td><td>answered</td><td>guesses</td><td><code>state.checked</code> is explicit; a checkbox glyph is a handful of pixels.</td></tr>
+      <tr><td>Unread count</td><td>answered</td><td>guesses</td><td>Badges are attributes in the tree, tiny marks in pixels.</td></tr>
+      <tr><td>Chart spike</td><td>blind</td><td>answered</td><td>Canvas content is custom-rendered — the honest blind spot. Pixels see color.</td></tr>
+      <tr><td>Modal dialog</td><td>answered</td><td>blind</td><td><code>state.modal</code> is data; "a box on top" is not proof of modality.</td></tr>
+      <tr><td>Window title</td><td>answered</td><td>answered</td><td>The one thing OCR reads reliably.</td></tr>
+    </table></div>
+    <p>The point is not "tree always wins" — it is <em>route perception per question</em>. Structure for controls and state; pixels for genuinely visual questions; a hybrid agent uses both.</p>
+  </section>
+
+  <section class="guide-section">
+    <h2>Honest limits</h2>
+    <ul>
+      <li>Token counts are a documented chars/4 estimate plus a pixels/750 image heuristic — a comparison tool, not a tokenizer benchmark.</li>
+      <li>The raster is a schematic, not a real screenshot; real vision models fail in more interesting ways (occlusion, styling, adversarial UI).</li>
+      <li>Fixture trees are well-formed; real apps ship missing names, wrong roles, and custom widgets that expose nothing at all.</li>
+      <li>Answerability ratings are illustrative, not a benchmark of any specific vision model.</li>
+    </ul>
+    <p class="try">Try it: <code>npm start</code> serves the lab, <code>npm run report</code> prints the same comparison in your terminal.</p>
+  </section>
+</main>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/agent-desktop" title="agent-desktop — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>agent-desktop</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/agent-desktop" title="Back to the article — agent-desktop">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=agent-desktop';}})();</script><!-- pb-back --></body>
+</html>

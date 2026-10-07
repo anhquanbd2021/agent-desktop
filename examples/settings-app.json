@@ -1,0 +1,127 @@
+{
+  "scene": "settings-app",
+  "title": "Settings — small preferences window",
+  "grid": [
+    64,
+    36
+  ],
+  "root": {
+    "role": "window",
+    "name": "Settings",
+    "desc": "Application preferences",
+    "bounds": [
+      0,
+      0,
+      64,
+      36
+    ],
+    "state": {
+      "focused": true
+    },
+    "children": [
+      {
+        "role": "form",
+        "name": "General",
+        "bounds": [
+          2,
+          2,
+          60,
+          32
+        ],
+        "children": [
+          {
+            "role": "checkbox",
+            "name": "Launch at login",
+            "bounds": [
+              4,
+              5,
+              24,
+              2
+            ],
+            "state": {
+              "checked": true
+            },
+            "actions": [
+              "press"
+            ]
+          },
+          {
+            "role": "checkbox",
+            "name": "Send crash reports",
+            "bounds": [
+              4,
+              9,
+              24,
+              2
+            ],
+            "state": {
+              "checked": false
+            },
+            "actions": [
+              "press"
+            ]
+          },
+          {
+            "role": "checkbox",
+            "name": "Encrypt backups",
+            "bounds": [
+              4,
+              13,
+              24,
+              2
+            ],
+            "state": {
+              "checked": true
+            },
+            "actions": [
+              "press"
+            ],
+            "desc": "Encrypt local backups before upload"
+          },
+          {
+            "role": "textbox",
+            "name": "Display name",
+            "bounds": [
+              4,
+              18,
+              28,
+              2
+            ],
+            "actions": [
+              "setText"
+            ],
+            "desc": "Shown to your teammates"
+          },
+          {
+            "role": "button",
+            "name": "Save",
+            "bounds": [
+              4,
+              24,
+              10,
+              2
+            ],
+            "actions": [
+              "press"
+            ],
+            "desc": "Save all changes"
+          },
+          {
+            "role": "button",
+            "name": "Reset",
+            "bounds": [
+              16,
+              24,
+              10,
+              2
+            ],
+            "actions": [
+              "press"
+            ],
+            "desc": "Restore defaults"
+          }
+        ]
+      }
+    ]
+  }
+}

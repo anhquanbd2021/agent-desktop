@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The same desktop through pixels and through the accessibility tree — token budgets, refs, and blind spots.">
+  <title>Perception Lab — pixels vs. the accessibility tree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@400;500;700;800&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<main id="main" tabindex="-1">
+  <nav aria-label="Primary"><a aria-current="page" href="/">Lab</a><a href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/agent-desktop">Source <span aria-hidden="true">↗</span></a></nav>
+  <header class="hero">
+    <div class="hero-copy"><p class="eyebrow">Perception Lab · two ways to see a desktop</p><h1>Pixels guess. Trees know.</h1><p class="lede">One fake desktop, two agent perceptions: a screenshot a vision model must squint at, and the serialized accessibility tree the OS already maintains. Compare the token budgets — then see which mode can actually answer the questions an agent needs answered.</p></div>
+    <p class="warning"><strong>Safe educational demo.</strong> Everything is computed locally in your browser from a fixture scene — no screen capture, no accessibility permission, nothing is uploaded.</p>
+  </header>
+
+  <section class="workspace" aria-label="Perception comparison">
+    <section class="panel" aria-labelledby="scene-title">
+      <div class="panel-head"><p class="eyebrow">The screen</p><h2 id="scene-title">Scene</h2></div>
+      <label for="scene">Fixture<select id="scene"></select></label>
+      <div id="raster" class="raster" role="img" aria-label="Schematic raster of the scene"></div>
+      <p class="muted">A schematic stand-in for a screenshot — <span id="px-budget" class="badge">—</span></p>
+    </section>
+
+    <section class="panel" aria-labelledby="modes-title">
+      <div class="section-heading"><div><p class="eyebrow">What the agent receives</p><h2 id="modes-title">Perception modes</h2></div></div>
+      <div class="toggles">
+        <label><input type="radio" name="mode" value="pixels" checked> screenshot → vision transcript</label>
+        <label><input type="radio" name="mode" value="full"> accessibility tree — full dump</label>
+        <label><input type="radio" name="mode" value="skeleton"> accessibility tree — skeleton overview</label>
+      </div>
+      <pre id="mode-output" class="code-block output" aria-live="polite" tabindex="0">—</pre>
+      <p class="muted">Estimated cost: <span id="mode-tokens" class="badge">—</span> · <span id="mode-note"></span></p>
+    </section>
+  </section>
+
+  <section class="workspace" aria-label="Drill down">
+    <section class="panel" aria-labelledby="drill-title">
+      <div class="panel-head"><p class="eyebrow">Progressive skeleton traversal</p><h2 id="drill-title">Drill into one region</h2></div>
+      <label for="drill">Subtree<select id="drill"></select></label>
+      <pre id="drill-output" class="code-block output" tabindex="0">—</pre>
+      <p class="muted"><span id="drill-tokens" class="badge">—</span> — the agent pays for the region it needs, not the whole app.</p>
+    </section>
+    <section class="panel" aria-labelledby="queries-title">
+      <div class="panel-head"><p class="eyebrow">Six questions an agent actually asks</p><h2 id="queries-title">Who can answer?</h2></div>
+      <ol id="queries" class="results" aria-label="Query answerability" role="list" tabindex="0"></ol>
+    </section>
+  </section>
+
+  <p class="page-foot"><a href="/guide.html">Read the guide</a> · <a href="https://github.com/anhquanbd2021/agent-desktop">Inspect source and tests</a></p>
+</main>
+<script type="module" src="/app.js"></script>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/agent-desktop" title="agent-desktop — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>agent-desktop</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/agent-desktop" title="Back to the article — agent-desktop">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=agent-desktop';}})();</script><!-- pb-back --></body>
+</html>
